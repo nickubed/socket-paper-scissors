@@ -43,3 +43,21 @@ footer {
     justify-content: center;
     align-items: center;
 }
+#game{
+    display: none;
+}
+.game-choices{
+    height: 40vh;
+    width: 65vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+.game-choice{
+    margin: 1em;
+    height: 35vh;
+    width: 15vw;
+    text-align: center;
+    border: 1px solid black;
+}
