@@ -10,6 +10,7 @@ app.use(express.static('public'))
 app.use(layout)
 
 // SOCKET VARIABLES
+let choices = []
 let connections = []
 let players = []
 // SOCKET FUN
@@ -40,6 +41,60 @@ io.sockets.on('connection', socket => {
                 io.emit('game start')
             }
         }
+    })
+
+    socket.on('player choice', (username, choice) => {
+        choices.push({'player': username, 'choice': choice})
+        console.log(`${username} chose ${choice}`)
+        if (choices.length === 2){
+            console.log('Both players have chosen')
+            io.emit('Choices', choices)
+
+            switch (choices[0]['choice']) {
+                case 'rock':
+                    switch (choices[1]['choice']){
+                        case 'rock':
+                            io.emit('Draw', choices);
+                            break;
+                        case 'paper':
+                            io.emit('Player 2 Wins')
+                            break;
+                        case 'scissors':
+                            io.emit('Player 1 Wins')
+                            break;
+                    }
+                    break;
+                case 'paper':
+                    switch (choices[1]['choice']){
+                        case 'rock':
+                            io.emit('Player 1 Wins')
+                            break;
+                        case 'paper':
+                            io.emit('Draw', choices);
+                            break;
+                        case 'scissors':
+                            io.emit('Player 2 Wins')
+                            break;
+                    }
+                    break;
+                case 'scissors':
+                    switch (choices[1]['choice']){
+                        case 'rock':
+                            io.emit('Player 2 Wins')
+                            break;
+                        case 'paper':
+                            io.emit('Player 1 Wins')
+                            break;
+                        case 'scissors':
+                            io.emit('Draw', choices);
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            choices = [];
+        } 
     })
 
     const updateUsernames = () => {
